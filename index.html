@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan - Zacky & Tiya</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* PENGATURAN DASAR */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Mencegah scroll saat loading */
+            background-color: #8c424a; /* Warna dasar marun */
+        }
+
+        /* --- HALAMAN LOADING --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #8c424a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            transition: opacity 1s ease; /* Efek transisi saat menghilang */
+        }
+
+        /* Animasi Jantung (Love) */
+        .love-icon {
+            font-size: 50px;
+            color: #ffd700; 
+            background: -webkit-linear-gradient(#ffd700, #ff4500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1.2s infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .loading-desc {
+            font-size: 12px;
+            text-align: center;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* --- HALAMAN UTAMA --- */
+        #main-content {
+            display: none; 
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Latar Belakang Blur */
+        .bg-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('pasangan.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(15px) brightness(0.6);
+            z-index: 1;
+        }
+
+        /* Kontainer Utama di Tengah */
+        .invitation-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 450px; 
+            height: 100vh;
+            margin: 0 auto;
+            background-image: url('pasangan.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        /* Lapisan Gradien Gelap di Bawah Foto */
+        .overlay-content {
+            background: linear-gradient(to top, rgba(140, 66, 74, 1) 0%, rgba(140, 66, 74, 0.8) 40%, transparent 100%);
+            padding: 40px 20px 20px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            margin-bottom: -5px;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 45px;
+            font-weight: bold;
+            margin-bottom: 5px; 
+        }
+
+        /* --- Wrapper Amplop Besar --- */
+        .ikon-amplop-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 10px auto; 
+            cursor: pointer;
+            color: white; 
+            transition: transform 0.3s;
+        }
+
+        .ikon-amplop-wrapper:hover {
+            transform: scale(1.05); 
+        }
+
+        /* Ukuran & Tarikan icon amplop */
+        .ikon-amplop-wrapper i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scaleX(1.5);
+            font-size: 90px; 
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        /* Efek Animasi Amplop Buka/Tutup Menggunakan Opacity */
+        .amplop-buka {
+            opacity: 0; 
+        }
+
+        .amplop-tutup {
+            opacity: 1; 
+        }
+
+        .ikon-amplop-wrapper:hover .amplop-tutup {
+            opacity: 0;
+        }
+
+        .ikon-amplop-wrapper:hover .amplop-buka {
+            opacity: 1;
+        }
+
+        /* --- Teks di Dalam Amplop --- */
+        .teks-dalam-amplop {
+            position: absolute;
+            top: 68%; /* Posisi awal saat amplop tertutup */
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            font-family: 'Dancing Script', cursive; /* Font diubah menjadi Poppins agar tegas */
+            font-size: 12px; /* Ukuran diperkecil */
+            font-weight: 600; /* Dibuat semi-bold */
+            letter-spacing: 1px; /* Jarak antar huruf agar terlihat premium */
+            color: #8c424a; 
+            text-align: center;
+            white-space: nowrap; 
+            pointer-events: none; 
+            z-index: 5; 
+            
+            /* Animasi agar teks turun dengan mulus saat di-hover */
+            transition: top 0.2s ease-in-out; 
+            
+            /* Outline Putih agar tetap terbaca jelas */
+            text-shadow: 
+                -1px -1px 0 #fff,  
+                 1px -1px 0 #fff,
+                -1px  1px 0 #fff,
+                 1px  1px 0 #fff,
+                 0px  0px 10px #ffffff; 
+        }
+
+        /* --- Teks turun ke bawah sedikit saat amplop terbuka --- */
+        .ikon-amplop-wrapper:hover .teks-dalam-amplop {
+            top: 74%; 
+        }
+
+        .guest-info {
+            text-align: center;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .guest-info p:first-child {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px; /* Jarak huruf elegan */
+            opacity: 0.85;
+            margin-bottom: 2px;
+        }
+
+        .guest-info strong {
+            font-size: 16px; /* Ukuran diperbesar sedikit agar tegas */
+            font-weight: 600;
+            display: block;
+            margin: 4px 0 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .guest-info p:last-child {
+            font-size: 12px;
+            font-weight: 300; /* Lebih tipis agar terlihat premium */
+            line-height: 1.6;
+            opacity: 0.8;
+            max-width: 320px; /* Menjaga teks tidak terlalu lebar ke samping */
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <i class="fa-solid fa-heart love-icon"></i>
+        <h2 class="loading-text">Loading...</h2>
+        <p class="loading-desc">Mohon tunggu sebentar..<br>Sedang melakukan proses perbukaan.</p>
+    </div>
+
+    <div id="main-content">
+        <div class="bg-blur"></div>
+        
+        <div class="invitation-card">
+            <div class="overlay-content">
+                <p class="subtitle">Undangan</p>
+                <h1 class="title">Dimas & Fadia</h1>
+                
+                <div class="ikon-amplop-wrapper" onclick="bukaUndangan()">
+                    <i class="fa-solid fa-envelope amplop-tutup"></i>
+                    <i class="fa-solid fa-envelope-open amplop-buka"></i>
+                    <span class="teks-dalam-amplop">Buka Undangan</span> </div>
+                
+                <div class="guest-info">
+                    <p>Kepada</p>
+                    <strong>Yth. Bpk/Ibu/Saudara/i</strong>
+                    <p>Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara pernikahan kami.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loader = document.getElementById('loading-screen');
+                loader.style.opacity = '0';
+                
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    document.body.style.overflow = 'auto'; 
+                }, 1000); 
+                
+            }, 3000); 
+        });
+
+        function bukaUndangan() {
+            window.location.href = 'detail.html';
+        }
+    </script>
+
+</body>
+</html>
